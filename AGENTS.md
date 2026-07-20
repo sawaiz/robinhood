@@ -22,6 +22,13 @@ This repository configures and documents Robinhood **Agentic Trading** via the o
 - Never invent balances, positions, or fill prices — always pull live data from MCP tools.
 - Surface Robinhood risk disclosures when the user first enables trading automation.
 
+## Active runbook
+
+- Full process, Plan 1 (SMH), levels, and scheduled Tasks: see [README.md](README.md).
+- Plan 1 automation may auto-sell SMH at stop **$536** or targets **$585 / $620** when Tasks fire; user opted into that automation.
+- Email reports address: `sawaiz@sawaizsyed.com`.
+- Fractional stops are not supported — never claim a resting stop is on the book without verifying open orders.
+
 ## Do not
 
 - Store API keys, OAuth tokens, or account numbers in the repo.

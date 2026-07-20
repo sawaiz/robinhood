@@ -1,0 +1,3 @@
+[mcp_servers.robinhood-trading]
+url = "https://agent.robinhood.com/mcp/trading"
+enabled = true

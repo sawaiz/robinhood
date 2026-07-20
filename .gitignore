@@ -1,0 +1,21 @@
+# Secrets / local auth
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+mcp_credentials.json
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Logs and local tooling
+logs/
+*.log
+node_modules/
+.venv/
+__pycache__/

@@ -19,3 +19,8 @@ logs/
 node_modules/
 .venv/
 __pycache__/
+portal/.venv/
+portal/data/chat_history.json
+portal/data/message_queue.json
+portal/data/*.tmp
+portal/.venv/

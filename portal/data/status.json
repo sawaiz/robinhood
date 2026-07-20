@@ -1,0 +1,33 @@
+{
+  "updated_at": "2026-07-20T16:15:27Z",
+  "account": "Agentic",
+  "cash": 30.0,
+  "buying_power": 30.0,
+  "total_value": 99.54,
+  "report_email": "sawaiz@sawaizsyed.com",
+  "plan": {
+    "id": "plan1",
+    "name": "SMH semi pullback",
+    "status": "active",
+    "symbol": "SMH",
+    "side": "long",
+    "quantity": 0.123224,
+    "avg_cost": 568.07,
+    "notional_entry": 70.0,
+    "stop": 536.0,
+    "t1": 585.0,
+    "t2": 620.0,
+    "ideal_entry_zone": [555.0, 562.0],
+    "order_id": "6a5e499f-a510-43ca-be9c-8d444d3718ad",
+    "notes": "Fractional stops not supported. Tasks auto-sell at stop/T1. Leave remaining $30 as cash unless SMH dips to 555-562."
+  },
+  "tasks": [
+    {"name": "plan1-smh-daily-10et", "when": "Weekdays 10:00 ET", "purpose": "Full status + auto-sell"},
+    {"name": "plan1-smh-midday-12et", "when": "Weekdays 12:00 ET", "purpose": "Level watch"},
+    {"name": "plan1-smh-powerhour-15et", "when": "Weekdays 15:00 ET", "purpose": "Power-hour + overnight note"},
+    {"name": "plan1-earnings-wed-722", "when": "2026-07-22 10:00 ET", "purpose": "Pre GOOGL/TSLA"},
+    {"name": "plan1-post-earnings-thu-723", "when": "2026-07-23 10:00 ET", "purpose": "Post-earnings gap"},
+    {"name": "plan1-weekly-fri-review", "when": "Fridays 10:00 ET", "purpose": "Weekly review"}
+  ],
+  "pending_user_messages": []
+}

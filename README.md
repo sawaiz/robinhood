@@ -10,18 +10,39 @@ Announced by [@RobinhoodApp](https://x.com/RobinhoodApp): *“Robinhood is now o
 
 ## Table of contents
 
-1. [MCP endpoint](#mcp-endpoint)
-2. [Setup (Grok Build TUI)](#setup-grok-build-tui)
-3. [Account rules](#account-rules)
-4. [Process history](#process-history)
-5. [Plan 1 — SMH semi pullback (active)](#plan-1--smh-semi-pullback-active)
-6. [Signal board (how ideas are sourced)](#signal-board-how-ideas-are-sourced)
-7. [Scheduled tasks & email reports](#scheduled-tasks--email-reports)
-8. [Manual checklist](#manual-checklist)
-9. [Other platforms](#other-platforms)
-10. [Safety notes](#safety-notes)
-11. [Repo layout](#repo-layout)
-12. [Links](#links)
+1. [Local web portal](#local-web-portal)
+2. [MCP endpoint](#mcp-endpoint)
+3. [Setup (Grok Build TUI)](#setup-grok-build-tui)
+4. [Account rules](#account-rules)
+5. [Process history](#process-history)
+6. [Plan 1 — SMH semi pullback (active)](#plan-1--smh-semi-pullback-active)
+7. [Signal board (how ideas are sourced)](#signal-board-how-ideas-are-sourced)
+8. [Scheduled tasks & email reports](#scheduled-tasks--email-reports)
+9. [Manual checklist](#manual-checklist)
+10. [Other platforms](#other-platforms)
+11. [Safety notes](#safety-notes)
+12. [Repo layout](#repo-layout)
+13. [Links](#links)
+
+---
+
+## Local web portal
+
+A **local dashboard + chat** lives in [`portal/`](portal/) so you can monitor Plan 1 and keep asking questions from the browser (without leaving the machine).
+
+```bash
+cd portal && ./run.sh
+# → http://127.0.0.1:8787
+```
+
+| Feature | Detail |
+|---|---|
+| Dashboard | Live SMH quote, P&amp;L, stop/T1/T2, cash, task schedule |
+| Chat | Further responses in-browser (local Plan-1 assistant; optional Grok via `XAI_API_KEY`) |
+| Queue | Messages saved to `portal/data/message_queue.json` for a Grok TUI session to pick up |
+| Orders | **Not** placed from the portal — use Robinhood app or Grok MCP Tasks |
+
+Optional: copy `portal/.env.example` → `portal/.env` and set `XAI_API_KEY` for full Grok chat. Details: [portal/README.md](portal/README.md).
 
 ---
 
@@ -330,6 +351,12 @@ Scheduled Tasks + email in this runbook are **Grok-specific**.
 .grok/config.toml   # Project-scoped MCP server definition
 AGENTS.md           # Agent safety / MCP usage rules
 README.md           # This runbook
+portal/             # Local web dashboard + chat
+  app.py            # FastAPI server
+  run.sh            # Start script
+  static/           # UI
+  data/status.json  # Plan snapshot (editable)
+  README.md         # Portal docs
 .gitignore          # Ignores secrets / env files
 ```
 

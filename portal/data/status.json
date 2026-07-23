@@ -1,33 +1,64 @@
 {
-  "updated_at": "2026-07-20T16:15:27Z",
+  "updated_at": "2026-07-23T14:05:00Z",
   "account": "Agentic",
-  "cash": 30.0,
-  "buying_power": 30.0,
-  "total_value": 99.54,
+  "account_number": "748082393",
+  "cash": 12.09,
+  "buying_power": 12.09,
+  "total_value": 98.09,
+  "options_value": 86.0,
+  "hands_off": true,
+  "user_involvement": "minimal — agent + Grok Tasks manage exits; user only reads emails",
+  "live_mark_premium": 0.86,
+  "live_pnl_usd": -4.0,
   "report_email": "sawaiz@sawaizsyed.com",
   "plan": {
-    "id": "plan1",
-    "name": "SMH semi pullback",
+    "id": "plan5",
+    "name": "TSLA Dip Bounce Starter",
     "status": "active",
-    "symbol": "SMH",
-    "side": "long",
-    "quantity": 0.123224,
-    "avg_cost": 568.07,
-    "notional_entry": 70.0,
-    "stop": 536.0,
-    "t1": 585.0,
-    "t2": 620.0,
-    "ideal_entry_zone": [555.0, 562.0],
-    "order_id": "6a5e499f-a510-43ca-be9c-8d444d3718ad",
-    "notes": "Fractional stops not supported. Tasks auto-sell at stop/T1. Leave remaining $30 as cash unless SMH dips to 555-562."
+    "strategy": "long_call",
+    "symbol": "TSLA",
+    "option": {
+      "type": "call",
+      "expiration": "2026-07-31",
+      "strike": 375.0,
+      "option_id": "53c52a9d-bdb7-42c2-88eb-b46976caf14b"
+    },
+    "quantity": 1,
+    "avg_cost_premium": 0.9,
+    "debit_usd": 90.0,
+    "order_id": "6a621de6-3d96-46f6-ab57-1b99d497c532",
+    "spot_at_entry": 327.91,
+    "break_even_expiry": 375.9,
+    "stop_premium": 0.45,
+    "t1_premium": 1.4,
+    "t2_premium": 1.85,
+    "stock_hard_stop": 310.0,
+    "time_stop": "2026-07-30T15:00:00-04:00",
+    "saves": [
+      {"name": "stop", "premium": 0.45, "action": "sell_to_close", "pnl_usd": -45},
+      {"name": "t1", "premium": 1.4, "action": "sell_to_close", "pnl_usd": 50},
+      {"name": "t2", "premium": 1.85, "action": "sell_to_close", "pnl_usd": 95}
+    ],
+    "notes": "Filled 1x TSLA Jul31 375c @ 0.90. Premium saves only (1 lot = full close). No average down. Doc: strategies/plan5-tsla-bounce.md"
   },
+  "prior_plans": [
+    {
+      "id": "plan1",
+      "name": "SMH semi pullback",
+      "status": "closed_t1",
+      "notes": "Sold SMH ~$585.35; realized ~+$2.13"
+    },
+    {
+      "id": "uso-150c",
+      "name": "USO Jul31 150c",
+      "status": "cancelled_unfilled",
+      "order_id": "6a61c434-3786-4cdd-87f3-f641846ce2c1"
+    }
+  ],
   "tasks": [
-    {"name": "plan1-smh-daily-10et", "when": "Weekdays 10:00 ET", "purpose": "Full status + auto-sell"},
-    {"name": "plan1-smh-midday-12et", "when": "Weekdays 12:00 ET", "purpose": "Level watch"},
-    {"name": "plan1-smh-powerhour-15et", "when": "Weekdays 15:00 ET", "purpose": "Power-hour + overnight note"},
-    {"name": "plan1-earnings-wed-722", "when": "2026-07-22 10:00 ET", "purpose": "Pre GOOGL/TSLA"},
-    {"name": "plan1-post-earnings-thu-723", "when": "2026-07-23 10:00 ET", "purpose": "Post-earnings gap"},
-    {"name": "plan1-weekly-fri-review", "when": "Fridays 10:00 ET", "purpose": "Weekly review"}
+    {"name": "plan5-tsla-open-10et", "when": "Weekdays 10:00 ET", "purpose": "Quote + auto-exit on stop/T1/T2/time", "task_id": "cb65d6a8-da84-4210-b2e2-46ec40fb1a41"},
+    {"name": "plan5-tsla-midday-12et", "when": "Weekdays 12:00 ET", "purpose": "Save-level watch", "task_id": "582d9b82-757e-494d-8413-572ae07d28f9"},
+    {"name": "plan5-tsla-powerhour-15et", "when": "Weekdays 15:00 ET", "purpose": "Power hour + overnight note", "task_id": "14f6c592-cfee-4bf6-9d90-e0852130d11b"}
   ],
   "pending_user_messages": []
 }

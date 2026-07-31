@@ -1,6 +1,6 @@
 # Plan 6 — XLE energy equity
 
-**Status:** Ready · **not filled** (investor profile required — place blocked 2026-07-31)  
+**Status:** **Active** (filled 2026-07-31)  
 **Account:** Agentic `748082393`
 
 ## Why
@@ -11,14 +11,17 @@ Book is ~**$37** after Plan 5 options loss. Rebuild with **equity**, not OTM opt
 - Size **$32** notional · leave ~**$5** cash
 - Defined % levels; fractional stops need manual/agent checks (no Grok Tasks)
 
-## Order (when profile complete)
+## Order (executed)
 
 | Field | Value |
 |---|---|
 | Side | Buy |
 | Type | Market · dollar **$32.00** · GFD · regular hours |
 | Symbol | XLE |
-| Spot at design | ~$58.84 (2026-07-31) |
+| Qty | **0.543774** |
+| Avg fill | **$58.8479** (app avg ~$58.85) |
+| Order id | `6a6cb6b4-0dd4-478e-b272-41ca7f63194d` |
+| Filled | 2026-07-31T14:52:37Z |
 
 ## Levels
 
@@ -27,14 +30,6 @@ Book is ~**$37** after Plan 5 options loss. Rebuild with **equity**, not OTM opt
 | Stop | **$55.50** | Sell full |
 | T1 | **$62.00** | Sell full |
 | T2 | **$64.00** | Stretch exit |
-
-## Blocker
-
-```
-https://applink.robinhood.com/investment_profile?account_number=748082393&context=second_trade
-```
-
-After complete: `review_equity_order` → `place_equity_order` with same params.
 
 ## Do not
 

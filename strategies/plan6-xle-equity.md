@@ -1,6 +1,6 @@
 # Plan 6 — XLE energy equity
 
-**Status:** Ready · **not filled** (investor profile required)  
+**Status:** Ready · **not filled** (investor profile required — place blocked 2026-07-31)  
 **Account:** Agentic `748082393`
 
 ## Why

@@ -42,6 +42,23 @@ a:hover { text-decoration: underline; }
   gap: 18px;
 }
 
+/* Portfolio balance chart at top */
+.chart-card .chart-bd {
+  padding-top: 4px;
+}
+.chart-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0f172a;
+}
+.note.warn {
+  border-color: rgba(245, 197, 66, 0.45);
+  color: var(--amber);
+}
+
 /* Header */
 .header {
   display: flex;

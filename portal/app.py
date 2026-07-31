@@ -125,13 +125,12 @@ SYSTEM_CONTEXT = """
 You are the local assistant for a Robinhood Agentic Trading portal.
 User report email: {email}
 
-Active Plan 1 (SMH semi pullback):
-- Account: Agentic only
-- Long SMH, qty ~{qty}, avg ~${avg}
-- Stop $536 → sell full; T1 $585 → sell full; T2 $620 stretch
-- Cash remaining ~${cash} — leave as cash unless SMH dips to $555–562 for optional add
-- Fractional stops unsupported; Grok Tasks check 10/12/15 ET weekdays
-- Never invent fills; prefer live quotes when provided
+Plan 6 (XLE energy equity) — primary:
+- Account: Agentic only · cash ~${cash}
+- Intended: buy market $32 XLE · stop $55.50 · T1 $62 · T2 $64
+- Status may be ready_blocked_profile until investor profile is done
+- Prior: Plan 1 SMH closed +$2; Plan 5 TSLA 375c closed -$65
+- Never invent fills; use live quotes when provided
 
 Be concise, practical, not financial advice.
 """.strip()
@@ -139,128 +138,91 @@ Be concise, practical, not financial advice.
 
 def local_assistant(user_text: str, status: Dict[str, Any], quote: Optional[Dict[str, Any]]) -> str:
     plan = status.get("plan") or {}
-    cash = status.get("cash", 30)
-    qty = plan.get("quantity", 0)
-    avg = plan.get("avg_cost", 0)
-    stop = float(plan.get("stop", 536))
-    t1 = float(plan.get("t1", 585))
-    t2 = float(plan.get("t2", 620))
+    cash = float(status.get("cash") or 0)
+    qty = plan.get("quantity") or 0
+    avg = float(plan.get("avg_cost") or 0)
+    stop = float(plan.get("stop") or 55.5)
+    t1 = float(plan.get("t1") or 62)
+    t2 = float(plan.get("t2") or 64)
+    sym = plan.get("symbol") or "XLE"
     price = quote.get("price") if quote else None
     text = user_text.lower().strip()
+    blocker = status.get("blocker") or {}
 
     def pnl_block() -> str:
-        if price is None or not qty:
-            return "No live mark available."
-        value = float(qty) * float(price)
-        cost = float(qty) * float(avg)
-        pnl = value - cost
-        pct = (pnl / cost * 100) if cost else 0
-        dist_stop = ((float(price) - stop) / float(price)) * 100
-        dist_t1 = ((t1 - float(price)) / float(price)) * 100
-        action = "HOLD"
-        if float(price) <= stop:
-            action = "STOP HIT → sell full SMH (manual or wait for next Task)"
-        elif float(price) >= t1:
-            action = "T1 HIT → take profit / sell full"
-        elif float(price) >= t2:
-            action = "T2 HIT → exit stretch"
-        return (
-            f"**SMH** mark ${price:.2f} · qty {qty} · avg ${avg:.2f}\n"
-            f"Position value ~${value:.2f} · P&L ~${pnl:+.2f} ({pct:+.2f}%)\n"
-            f"Cash ${cash:.2f} · Account ~${value + float(cash):.2f}\n"
-            f"Stop ${stop:.0f} ({dist_stop:+.1f}% away) · T1 ${t1:.0f} ({dist_t1:+.1f}% to go)\n"
-            f"**Action: {action}**"
-        )
+        total = float(status.get("total_value") or cash)
+        lines = [
+            f"**Account** ~${total:.2f} cash ${cash:.2f}",
+            f"**{plan.get('id', 'plan').upper()}** {plan.get('name', '')} · status `{plan.get('status')}`",
+            f"Symbol **{sym}** · stop ${stop:.2f} · T1 ${t1:.2f} · T2 ${t2:.2f}",
+        ]
+        if price is not None:
+            lines.append(f"Live {sym} ${float(price):.2f}")
+        if qty and avg and price is not None:
+            value = float(qty) * float(price)
+            cost = float(qty) * avg
+            pnl = value - cost
+            lines.append(f"Position ~${value:.2f} · P&L ${pnl:+.2f}")
+        elif plan.get("dollar_amount"):
+            lines.append(f"Not filled yet · intended buy ${plan.get('dollar_amount')}")
+        if blocker.get("url"):
+            lines.append(f"Blocker: {blocker.get('message')} → {blocker.get('url')}")
+        lines.append("**Not financial advice.**")
+        return "\n".join(lines)
 
-    if any(k in text for k in ("status", "pnl", "p&l", "position", "how am i", "check plan", "plan 1")):
-        return pnl_block() + "\n\n_Not financial advice. Live trading remains on Robinhood + Grok Tasks._"
+    if any(k in text for k in ("status", "pnl", "p&l", "position", "how am i", "check plan", "plan 6", "plan6", "balance")):
+        return pnl_block()
 
-    if any(k in text for k in ("remaining", "cash", "30", "rest of", "leftover")):
+    if any(k in text for k in ("remaining", "cash", "leftover", "rest of")):
         return (
-            f"You have **${cash:.2f} cash** left on Agentic.\n\n"
-            "Recommendation: **keep it as cash**. Only deploy on an SMH dip to "
-            f"**$555–562** as a small second tranche. Do not chase MU/SNDK/energy with it.\n\n"
+            f"**${cash:.2f} cash** on Agentic (~$37 after Plan 5).\n"
+            f"Plan 6: deploy **$32** to XLE after investor profile; keep ~$5 buffer.\n\n"
             + pnl_block()
         )
 
-    if any(k in text for k in ("stop", "level", "target", "t1", "t2", "536", "585")):
+    if any(k in text for k in ("stop", "level", "target", "t1", "t2")):
         return (
-            f"Plan 1 levels:\n"
-            f"- **Stop** ${stop:.0f} → sell full\n"
-            f"- **T1** ${t1:.0f}–600 → sell full (or half if you override)\n"
-            f"- **T2** ${t2:.0f} stretch\n"
-            f"- Ideal add zone $555–562 (optional)\n\n"
-            + (pnl_block() if price else "")
+            f"Plan 6 levels ({sym}):\n"
+            f"- **Stop** ${stop:.2f} → sell full\n"
+            f"- **T1** ${t1:.2f} → sell full\n"
+            f"- **T2** ${t2:.2f} stretch\n\n"
+            + pnl_block()
         )
 
     if any(k in text for k in ("sell", "exit", "close position")):
-        if price is not None and float(price) <= stop:
-            return (
-                f"Price ${price:.2f} is at/below stop ${stop:.0f}. "
-                "This portal **cannot** place Robinhood orders. "
-                "Sell full SMH in the **Robinhood app**, or wait for the next Grok Task "
-                "(10/12/15 ET) which is authorized to sell on Agentic. "
-                "Also set app alerts at 536/585."
-            )
-        if price is not None and float(price) >= t1:
-            return (
-                f"Price ${price:.2f} is at/above T1 ${t1:.0f}. "
-                "Take profit in the **Robinhood app** or let the next Task sell. "
-                "This web portal does not submit broker orders."
-            )
         return (
-            "To exit early: sell SMH in the **Robinhood app** (full 0.123224 shares), "
-            "then tell this chat “flat” so status can be updated. "
-            "Portal itself cannot place broker orders — only Grok MCP Tasks / the app can."
+            f"Portal cannot place broker orders. Sell {sym} in the **Robinhood app** "
+            "or ask Grok MCP to sell-to-close on Agentic."
         )
 
-    if any(k in text for k in ("task", "schedule", "email", "when")):
-        tasks = status.get("tasks") or []
-        lines = [f"- **{t.get('name')}** — {t.get('when')}: {t.get('purpose')}" for t in tasks]
-        return (
-            f"Reports address: **{status.get('report_email', REPORT_EMAIL)}**\n\n"
-            "Scheduled Tasks:\n" + "\n".join(lines) +
-            "\n\nBetween runs, use Robinhood app price alerts at $536 and $585."
+    if any(k in text for k in ("profile", "block", "execute", "buy")):
+        url = blocker.get("url") or (
+            "https://applink.robinhood.com/investment_profile"
+            "?account_number=748082393&context=second_trade"
         )
-
-    if any(k in text for k in ("flat", "sold", "closed", "no position")):
-        status["plan"] = {**plan, "status": "closed", "quantity": 0}
-        status["cash"] = float(status.get("total_value") or status.get("cash") or 100)
-        status["updated_at"] = datetime.now(timezone.utc).isoformat()
-        _write_json(STATUS_PATH, status)
-        return "Marked Plan 1 as **closed** in portal status. Pause/archive Grok Tasks so emails stop."
+        return (
+            "Plan 6 is **ready but blocked** until the investor profile is complete.\n"
+            f"Link: {url}\n"
+            "Then say **execute Plan 6** in Grok TUI."
+        )
 
     if text in ("help", "?", "hi", "hello"):
         return (
-            "Local Agentic portal. Try:\n"
-            "- **status** — Plan 1 P&L and action\n"
-            "- **levels** — stop / T1 / T2\n"
-            "- **cash** — remaining $30 guidance\n"
-            "- **tasks** — schedule + email\n"
-            "- **sell** — how to exit (app / Tasks)\n"
-            "- Free-form questions (full Grok if `XAI_API_KEY` set)\n\n"
+            "Try: **status** · **levels** · **cash** · **plan6** · **help**\n\n"
             + pnl_block()
         )
 
-    # generic local reply
-    return (
-        "Local mode (no XAI_API_KEY). Here's Plan 1 context:\n\n"
-        + pnl_block()
-        + "\n\nAsk: status · levels · cash · tasks · sell · help\n"
-        "Set `XAI_API_KEY` in `portal/.env` for full Grok answers from this site."
-    )
+    return pnl_block() + "\n\nAsk: status · levels · cash · plan6 · help"
 
 
 async def grok_chat(messages: List[Dict[str, str]], status: Dict[str, Any], quote: Optional[Dict[str, Any]]) -> str:
     plan = status.get("plan") or {}
     sys = SYSTEM_CONTEXT.format(
         email=status.get("report_email", REPORT_EMAIL),
-        qty=plan.get("quantity"),
-        avg=plan.get("avg_cost"),
         cash=status.get("cash"),
     )
     if quote:
-        sys += f"\n\nLive quote SMH: {json.dumps(quote)}"
+        sys += f"\n\nLive quote: {json.dumps(quote)}"
     sys += f"\n\nPortal status JSON: {json.dumps(status)[:4000]}"
 
     payload = {
@@ -335,13 +297,17 @@ async def get_status():
         mark = float(plan["quantity"]) * float(quote["price"])
         cost = float(plan["quantity"]) * float(plan.get("avg_cost") or 0)
         pnl = mark - cost
+    cash = float(status.get("cash") or 0)
+    account_est = float(status.get("total_value") or cash)
+    if mark is not None:
+        account_est = mark + cash
     return {
         "status": status,
         "quote": quote,
         "derived": {
             "position_value": mark,
             "unrealized_pnl": pnl,
-            "account_est": (mark or 0) + float(status.get("cash") or 0),
+            "account_est": account_est,
         },
     }
 

@@ -16,7 +16,7 @@
         <div class="logo">RH</div>
         <div>
           <h1>Agentic Trading Portal</h1>
-          <p>Plan 1 · SMH · local dashboard + chat</p>
+          <p id="hdr-sub">Plan 6 · XLE · local dashboard</p>
         </div>
       </div>
       <div class="badges">
@@ -27,17 +27,31 @@
       </div>
     </header>
 
+    <!-- Portfolio balance chart (top) -->
+    <section class="card chart-card">
+      <div class="card-hd">
+        <h2>Portfolio balance</h2>
+        <span class="badge" id="bal-now">—</span>
+      </div>
+      <div class="card-bd chart-bd">
+        <img
+          id="portfolio-chart"
+          src="/static/charts/portfolio_balance.png"
+          alt="Agentic portfolio balance over time"
+        />
+      </div>
+    </section>
+
     <div class="grid">
-      <!-- Left: dashboard -->
       <section class="card">
         <div class="card-hd">
-          <h2>Plan 1 dashboard</h2>
-          <span class="badge ok" id="plan-status">active</span>
+          <h2 id="dash-title">Plan dashboard</h2>
+          <span class="badge warn" id="plan-status">—</span>
         </div>
         <div class="card-bd">
           <div class="metrics">
             <div class="metric">
-              <div class="label">SMH last</div>
+              <div class="label" id="lbl-price">Symbol last</div>
               <div class="value" id="m-price">—</div>
               <div class="sub" id="m-change">day change</div>
             </div>
@@ -52,7 +66,7 @@
               <div class="sub">Agentic BP</div>
             </div>
             <div class="metric">
-              <div class="label">Account est.</div>
+              <div class="label">Account</div>
               <div class="value" id="m-acct">—</div>
               <div class="sub" id="m-qty">qty · avg</div>
             </div>
@@ -60,7 +74,7 @@
 
           <div class="levels">
             <div class="level">
-              <span class="tag">STOP 536</span>
+              <span class="tag" id="tag-stop">STOP</span>
               <div class="bar"><span id="bar-stop"></span></div>
               <span class="px" id="dist-stop">—</span>
             </div>
@@ -70,12 +84,12 @@
               <span class="px" id="dist-mark">—</span>
             </div>
             <div class="level">
-              <span class="tag">T1 585</span>
+              <span class="tag" id="tag-t1">T1</span>
               <div class="bar"><span id="bar-t1"></span></div>
               <span class="px" id="dist-t1">—</span>
             </div>
             <div class="level">
-              <span class="tag">T2 620</span>
+              <span class="tag" id="tag-t2">T2</span>
               <div class="bar"><span id="bar-t2"></span></div>
               <span class="px" id="dist-t2">—</span>
             </div>
@@ -84,38 +98,26 @@
           <div class="actions">
             <button type="button" class="primary" data-prompt="status">Check status</button>
             <button type="button" data-prompt="levels">Levels</button>
-            <button type="button" data-prompt="cash">Remaining cash</button>
-            <button type="button" data-prompt="tasks">Tasks / email</button>
-            <button type="button" class="danger" data-prompt="sell">How to sell</button>
+            <button type="button" data-prompt="cash">Cash</button>
+            <button type="button" data-prompt="plan6">Plan 6</button>
           </div>
 
-          <div class="note" id="action-note">
-            Loading Plan 1 action…
-          </div>
-
-          <h2 style="font-size:0.9rem;margin:18px 0 10px">Scheduled Tasks</h2>
-          <ul class="tasks" id="task-list"></ul>
+          <div class="note" id="action-note">Loading…</div>
+          <div class="note warn" id="blocker-note" style="display:none;margin-top:10px"></div>
         </div>
       </section>
 
-      <!-- Right: chat -->
       <section class="card chat">
         <div class="card-hd">
-          <h2>Chat · further responses</h2>
-          <div class="actions" style="margin:0">
-            <button type="button" id="btn-clear" class="danger">Clear</button>
-          </div>
+          <h2>Chat</h2>
+          <button type="button" id="btn-clear" class="danger">Clear</button>
         </div>
         <div class="card-bd">
           <div class="messages" id="messages">
-            <div class="empty">Ask about Plan 1, levels, cash, or next steps. Replies stay in this portal.</div>
+            <div class="empty">Ask about Plan 6, balance, or next steps.</div>
           </div>
-          <p class="hint">
-            Messages are answered here (local Plan-1 assistant, or Grok if <code>XAI_API_KEY</code> is set).
-            They are also queued in <code>portal/data/message_queue.json</code> for a Grok TUI session to pick up.
-          </p>
           <form class="composer" id="chat-form">
-            <textarea id="chat-input" rows="2" placeholder="Message the portal… e.g. status, should I hold?"></textarea>
+            <textarea id="chat-input" rows="2" placeholder="Message…"></textarea>
             <div class="composer-actions">
               <button type="submit" class="primary" id="btn-send">Send</button>
             </div>
@@ -125,7 +127,7 @@
     </div>
 
     <footer class="footer">
-      Local only · 127.0.0.1 · Not financial advice · Orders only via Robinhood app or Grok MCP Tasks
+      Local only · Not financial advice · Orders via Robinhood / Grok MCP
     </footer>
   </div>
   <script src="/static/app.js"></script>

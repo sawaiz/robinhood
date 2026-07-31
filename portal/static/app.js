@@ -88,6 +88,16 @@ async function loadStatus() {
   const price = q.price;
   const changePct = q.change_pct;
   const change = q.change;
+  const sym = plan.symbol || "—";
+
+  setText("#hdr-sub", `${plan.id || "plan"} · ${sym} · local dashboard`);
+  setText("#dash-title", `${plan.name || "Plan"} dashboard`);
+  setText("#lbl-price", `${sym} last`);
+  setText("#bal-now", money(st.total_value ?? st.cash));
+  const chart = $("#portfolio-chart");
+  if (chart && st.portfolio_chart) {
+    chart.src = `${st.portfolio_chart}?t=${Date.now()}`;
+  }
 
   setText("#m-price", money(price));
   const chEl = $("#m-change");
@@ -98,55 +108,76 @@ async function loadStatus() {
 
   const pnl = d.unrealized_pnl;
   const pnlEl = $("#m-pnl");
-  pnlEl.textContent = money(pnl);
-  pnlEl.className = `value ${pnl != null && pnl >= 0 ? "up" : "down"}`;
+  if (pnl == null || plan.quantity == null || plan.quantity === 0) {
+    pnlEl.textContent = plan.status?.includes("ready") ? "not filled" : money(0);
+    pnlEl.className = "value";
+  } else {
+    pnlEl.textContent = money(pnl);
+    pnlEl.className = `value ${pnl >= 0 ? "up" : "down"}`;
+  }
   setText("#m-value", `pos ${money(d.position_value)}`);
   setText("#m-cash", money(st.cash));
-  setText("#m-acct", money(d.account_est));
+  setText("#m-acct", money(d.account_est ?? st.total_value ?? st.cash));
   setText(
     "#m-qty",
-    `${plan.quantity ?? "—"} sh · avg ${money(plan.avg_cost)}`
+    plan.quantity
+      ? `${plan.quantity} sh · avg ${money(plan.avg_cost)}`
+      : plan.dollar_amount
+        ? `plan $${plan.dollar_amount} · not filled`
+        : "flat cash"
   );
 
-  $("#plan-status").textContent = plan.status || "—";
+  const stEl = $("#plan-status");
+  stEl.textContent = plan.status || "—";
+  stEl.className =
+    plan.status && plan.status.includes("closed")
+      ? "badge"
+      : plan.status && plan.status.includes("block")
+        ? "badge warn"
+        : "badge ok";
 
-  const stop = plan.stop ?? 536;
-  const t1 = plan.t1 ?? 585;
-  const t2 = plan.t2 ?? 620;
+  const stop = Number(plan.stop ?? 0);
+  const t1 = Number(plan.t1 ?? 0);
+  const t2 = Number(plan.t2 ?? 0);
+  setText("#tag-stop", `STOP ${stop || "—"}`);
+  setText("#tag-t1", `T1 ${t1 || "—"}`);
+  setText("#tag-t2", `T2 ${t2 || "—"}`);
 
-  if (price != null) {
+  if (price != null && stop && t1 && t2) {
     setText("#dist-stop", `${pct(((price - stop) / price) * 100)} vs stop`);
     setText("#dist-mark", money(price));
     setText("#dist-t1", `${pct(((t1 - price) / price) * 100)} to T1`);
     setText("#dist-t2", `${pct(((t2 - price) / price) * 100)} to T2`);
-    $("#bar-stop").style.width = `${levelProgress(price, stop - 20, t2)}%`;
+    $("#bar-stop").style.width = `${levelProgress(price, stop - 5, t2)}%`;
     $("#bar-mark").style.width = `${levelProgress(price, stop, t2)}%`;
     $("#bar-t1").style.width = `${levelProgress(price, stop, t1)}%`;
     $("#bar-t2").style.width = `${levelProgress(price, stop, t2)}%`;
-
-    let action = "HOLD — between stop and T1";
-    let cls = "note";
-    if (price <= stop) {
-      action = "STOP ZONE — sell full SMH in Robinhood app or next Task";
-      cls = "note";
-    } else if (price >= t1) {
-      action = "T1 ZONE — take profit / sell full";
-    }
-    const note = $("#action-note");
-    note.className = cls;
-    note.textContent = action + (plan.notes ? ` · ${plan.notes}` : "");
   }
 
-  const list = $("#task-list");
-  list.innerHTML = "";
-  for (const t of st.tasks || []) {
-    const li = document.createElement("li");
-    li.innerHTML = `<div><strong>${escapeHtml(
-      t.name || ""
-    )}</strong><div class="purpose">${escapeHtml(
-      t.purpose || ""
-    )}</div></div><div class="when">${escapeHtml(t.when || "")}</div>`;
-    list.appendChild(li);
+  let action = plan.notes || "See Plan 6 in README";
+  if (plan.status === "ready_blocked_profile") {
+    action =
+      "Plan 6 ready: buy $32 XLE market after investor profile — then say execute Plan 6";
+  } else if (price != null && stop && price <= stop) {
+    action = `STOP ZONE — sell full ${sym}`;
+  } else if (price != null && t1 && price >= t1) {
+    action = `T1 ZONE — take profit / sell full ${sym}`;
+  } else if (plan.quantity) {
+    action = "HOLD — between stop and T1";
+  }
+  const note = $("#action-note");
+  note.className = "note";
+  note.textContent = action;
+
+  const blocker = st.blocker;
+  const bn = $("#blocker-note");
+  if (blocker && blocker.url) {
+    bn.style.display = "block";
+    bn.innerHTML = `${escapeHtml(blocker.message || "Blocked")}. <a href="${escapeHtml(
+      blocker.url
+    )}" target="_blank" rel="noopener">Complete profile</a>`;
+  } else if (bn) {
+    bn.style.display = "none";
   }
 }
 

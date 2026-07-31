@@ -1,0 +1,65 @@
+{
+  "currency": "USD",
+  "points": [
+    {
+      "t": "2026-07-20T14:00:00Z",
+      "total": 100.0,
+      "event": "Funded Agentic ~$100"
+    },
+    {
+      "t": "2026-07-20T15:30:00Z",
+      "total": 100.0,
+      "event": "Plan 1 SMH buy $70"
+    },
+    {
+      "t": "2026-07-21T20:00:00Z",
+      "total": 102.13,
+      "event": "Plan 1 SMH sold T1 ~+$2"
+    },
+    {
+      "t": "2026-07-23T13:58:00Z",
+      "total": 102.13,
+      "event": "Plan 5 TSLA 375c buy $90"
+    },
+    {
+      "t": "2026-07-23T14:05:00Z",
+      "total": 98.09,
+      "event": "Mark ~$0.86"
+    },
+    {
+      "t": "2026-07-23T16:03:00Z",
+      "total": 88.09,
+      "event": "Mark ~$0.76"
+    },
+    {
+      "t": "2026-07-23T19:14:00Z",
+      "total": 67.09,
+      "event": "Mark ~$0.55"
+    },
+    {
+      "t": "2026-07-23T19:32:00Z",
+      "total": 66.09,
+      "event": "Mark ~$0.54"
+    },
+    {
+      "t": "2026-07-24T06:55:00Z",
+      "total": 64.09,
+      "event": "Premarket mark ~$0.52"
+    },
+    {
+      "t": "2026-07-24T16:58:00Z",
+      "total": 38.09,
+      "event": "Stop zone mark ~$0.26"
+    },
+    {
+      "t": "2026-07-24T16:59:30Z",
+      "total": 37.03,
+      "event": "Plan 5 closed @ $0.25 (\u2212$65)"
+    },
+    {
+      "t": "2026-07-31T14:45:00Z",
+      "total": 37.03,
+      "event": "Cash flat \u00b7 Plan 6 pending profile"
+    }
+  ]
+}

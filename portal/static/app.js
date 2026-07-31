@@ -64,7 +64,6 @@ async function loadHealth() {
       ? `Grok · ${h.model || "api"}`
       : "local assistant";
     $("#badge-mode").className = h.grok_enabled ? "badge ok" : "badge warn";
-    $("#badge-email").textContent = h.report_email || "email";
   } catch {
     $("#badge-health").textContent = "offline";
     $("#badge-health").className = "badge warn";

@@ -7,8 +7,9 @@
   "total_value": 37.03,
   "options_value": 0,
   "equity_value": 0,
-  "report_email": "sawaiz@sawaizsyed.com",
   "hands_off": true,
+  "tasks": [],
+  "notifications": "off",
   "blocker": {
     "code": "investor_profile_required",
     "message": "Second trade blocked until investor profile completed",

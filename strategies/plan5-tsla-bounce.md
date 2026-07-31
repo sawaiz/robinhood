@@ -72,13 +72,9 @@ All targets use **option mark / mid**, not only stock price. With 1 contract, T1
 
 ## Monitoring
 
-Grok Tasks (email `sawaiz@sawaizsyed.com` when configured):
+**Closed.** Grok Tasks for this plan were archived (user opted out of Tasks / email notifications).
 
-1. Open / 10:00 ET — quote + save check + auto-exit if stop/T1/T2/time
-2. Midday 12:00 ET — same
-3. Power hour 15:00 ET — same + overnight note
-
-Portal: `portal/data/status.json` plan id `plan5`.  
+Portal: `portal/data/status.json` (historical).  
 Chart: `portal/static/charts/plan5_tsla_bounce.png`.
 
 ## Exit checklist (agent)

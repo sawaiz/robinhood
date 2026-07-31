@@ -24,9 +24,9 @@ This repository configures and documents Robinhood **Agentic Trading** via the o
 
 ## Active runbook
 
-- Full process, Plan 1 (SMH), levels, and scheduled Tasks: see [README.md](README.md).
-- Plan 1 automation may auto-sell SMH at stop **$536** or targets **$585 / $620** when Tasks fire; user opted into that automation.
-- Email reports address: `sawaiz@sawaizsyed.com`.
+- Full process and plans: see [README.md](README.md).
+- **No Grok Tasks / scheduled automations / email notifications** — user opted out. Do not create Tasks unless they explicitly ask.
+- Manage exits only when the user asks for a check or when they explicitly authorize auto-exits in-session.
 - Fractional stops are not supported — never claim a resting stop is on the book without verifying open orders.
 
 ## Do not

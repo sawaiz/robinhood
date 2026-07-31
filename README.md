@@ -1,6 +1,6 @@
 # Robinhood Agentic Trading
 
-Short-term trades on a dedicated **Agentic** account via the [Robinhood Trading MCP](https://agent.robinhood.com/mcp/trading). Managed in Grok with email checks.
+Short-term trades on a dedicated **Agentic** account via the [Robinhood Trading MCP](https://agent.robinhood.com/mcp/trading). Managed in Grok (no scheduled Tasks / email notifications).
 
 **Not financial advice.** You can lose the whole book.
 
@@ -102,7 +102,7 @@ cd portal && ./run.sh   # http://127.0.0.1:8787
 |---|---|
 | Trade **Agentic only** | Invent balances / fills |
 | Prefer equity on tiny book | Blind OTM options after Plan 5 |
-| Email: sawaiz@sawaizsyed.com | Commit tokens / `.env` |
+| Ask agent to check / exit | Rely on Grok Tasks or email alerts |
 
 ---
 

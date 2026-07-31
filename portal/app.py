@@ -123,7 +123,7 @@ async def fetch_quote(symbol: str) -> Dict[str, Any]:
 
 SYSTEM_CONTEXT = """
 You are the local assistant for a Robinhood Agentic Trading portal.
-User report email: {email}
+No Grok Tasks or email notifications are configured.
 
 Plan 6 (XLE energy equity) — primary:
 - Account: Agentic only · cash ~${cash}
@@ -218,7 +218,6 @@ def local_assistant(user_text: str, status: Dict[str, Any], quote: Optional[Dict
 async def grok_chat(messages: List[Dict[str, str]], status: Dict[str, Any], quote: Optional[Dict[str, Any]]) -> str:
     plan = status.get("plan") or {}
     sys = SYSTEM_CONTEXT.format(
-        email=status.get("report_email", REPORT_EMAIL),
         cash=status.get("cash"),
     )
     if quote:

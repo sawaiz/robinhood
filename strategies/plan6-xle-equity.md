@@ -9,7 +9,7 @@ Book is ~**$37** after Plan 5 options loss. Rebuild with **equity**, not OTM opt
 
 - **XLE** = diversified energy (XOM/CVX heavy)
 - Size **$32** notional · leave ~**$5** cash
-- Defined % levels; fractional stops still need tasks/manual (same as Plan 1)
+- Defined % levels; fractional stops need manual/agent checks (no Grok Tasks)
 
 ## Order (when profile complete)
 
